@@ -45,14 +45,49 @@ npm run build
 
 同时也可以根据本地PHP环境的访问地址来修改 `/config/index.js` 中 `proxyTabel` 相关配置。
 
+
 ### API接口请求地址
 
 修改 `/src/config/index.js` 中的 `baseURL`
+
+### adny的配置
+我这里是LAMPP apache做服务器，自带php处理器 挂载80或者443端口上
+然后在 `front-end/config/index.js` 中改成如下
+```js
+  dev: {
+    env: require('./dev.env'),
+    port: 9090,
+    autoOpenBrowser: false,
+    assetsSubDirectory: 'static',
+    assetsPublicPath: '/',
+    // 解决跨域问题
+    proxyTable: {
+      '/api': {
+        target: 'http://localhost:80/vue-questionnaire/',   //重要的是这个地方，这里是由php处理器处理的api，lampp上apache的端口是80，所以这里调成80，其他请按照相关配置自行修改
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/api'
+        }
+      }
+    },
+```
+然后就可以使用了
 
 ## 后台配置
 数据库文件： `api/database.sql`，使用前请先导入。
 
 CI框架数据库连接配置信息请先设置。
+
+### andy的配置
+在本机mysql环境下导入sql后
+在 `api/application/config/database.php`文件中修改相应配置即可
+
+
+## 微信公众号相关
+### TODO
+1. 接入公众号平台接口登陆
+2. 使用公众号账号作为唯一用户
+3. 可关注公众号二维码
 
 ## 打赏
 如果我的付出能够帮助到你，我也乐于接受你的帮助，小小的赞赏是我们持续进步的动力。
